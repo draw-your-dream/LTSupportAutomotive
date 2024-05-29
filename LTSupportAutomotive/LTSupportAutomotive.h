@@ -27,6 +27,9 @@ FOUNDATION_EXPORT const unsigned char LTSupportAutomotiveVersionString[];
 #import <LTSupportAutomotive/LTOBD2CaptureFile.h>
 
 // aux (should go into a seperate library)
+#import <LTSupportAutomotive/TCPTransporter.h>
+#import <LTSupportAutomotive/TCPReadStream.h>
+#import <LTSupportAutomotive/TCPWriteStream.h>
 #import <LTSupportAutomotive/LTBTLESerialTransporter.h>
 #import <LTSupportAutomotive/LTBTLEReadCharacteristicStream.h>
 #import <LTSupportAutomotive/LTBTLEWriteCharacteristicStream.h>

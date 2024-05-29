@@ -22,7 +22,7 @@ static const CGFloat animationDuration = 0.15;
 
 @implementation ViewController
 {
-    LTBTLESerialTransporter* _transporter;
+    TCPTransporter* _transporter;
     LTOBD2Adapter* _obd2Adapter;
 
     NSArray<CBUUID*>* _serviceUUIDs;
@@ -42,7 +42,7 @@ static const CGFloat animationDuration = 0.15;
     [super viewDidLoad];
 
     NSMutableArray<CBUUID*>* ma = [NSMutableArray array];
-    [@[ @"FFF0", @"FFE0", @"BEEF" , @"E7810A71-73AE-499D-8C15-FAA9AEF0C3F2"] enumerateObjectsUsingBlock:^(NSString* _Nonnull uuid, NSUInteger idx, BOOL * _Nonnull stop) {
+    [@[ @"FFF0", @"FFE0", @"BEEF" , @"e2d36f99-8909-4136-9a49-d825508b297b"] enumerateObjectsUsingBlock:^(NSString* _Nonnull uuid, NSUInteger idx, BOOL * _Nonnull stop) {
         [ma addObject:[CBUUID UUIDWithString:uuid]];
     }];
     _serviceUUIDs = [NSArray arrayWithArray:ma];
@@ -55,11 +55,15 @@ static const CGFloat animationDuration = 0.15;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(onRefreshClicked:)];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAdapterChangedState:) name:LTOBD2AdapterDidUpdateState object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTransporterDidUpdateSignalStrength:) name:LTBTLESerialTransporterDidUpdateSignalStrength object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAdapterDidSendBytes:) name:LTOBD2AdapterDidSend object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAdapterDidReceiveBytes:) name:LTOBD2AdapterDidReceive object:nil];
-
-    [self connect];
+    
+//    [self connect];
+    self->_tableView.dataSource = nil;
+    [self->_tableView reloadData];
+    self->_rpmLabel.text = self->_speedLabel.text = self->_tempLabel.text = @"";
+    self->_rssiLabel.text = @"";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(onConnectAdapterClicked:)];
 }
 
 -(void)didReceiveMemoryWarning
@@ -179,10 +183,10 @@ static const CGFloat animationDuration = 0.15;
     _adapterStatusLabel.text = @"Looking for adapter...";
     _rpmLabel.text = _speedLabel.text = _tempLabel.text = @"";
     _rssiLabel.text = @"";
-    _incomingBytesNotification.alpha = 0.3;
-    _outgoingBytesNotification.alpha = 0.3;
+    _incomingBytesNotification.alpha = 1;
+    _outgoingBytesNotification.alpha = 1;
 
-    _transporter = [LTBTLESerialTransporter transporterWithIdentifier:nil serviceUUIDs:_serviceUUIDs];
+    _transporter = [TCPTransporter transporterWithHost:@"192.168.2.111" andPort:35000];
     [_transporter connectWithBlock:^(NSInputStream * _Nullable inputStream, NSOutputStream * _Nullable outputStream) {
 
         if ( !inputStream )
@@ -195,7 +199,6 @@ static const CGFloat animationDuration = 0.15;
         [self->_obd2Adapter connect];
     }];
 
-    [_transporter startUpdatingSignalStrengthWithInterval:1.0];
 }
 
 -(void)disconnect
@@ -344,7 +347,7 @@ static const CGFloat animationDuration = 0.15;
             {
                 self->_tableView.dataSource = nil;
                 [self->_tableView reloadData];
-                self->_rpmLabel.text = self->_speedLabel.text = _tempLabel.text = @"";
+                self->_rpmLabel.text = self->_speedLabel.text = self->_tempLabel.text = @"";
                 self->_rssiLabel.text = @"";
                 self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(onConnectAdapterClicked:)];
                 break;
@@ -360,6 +363,7 @@ static const CGFloat animationDuration = 0.15;
             default:
             {
                 NSLog( @"Unhandeld adapter state %@", self->_obd2Adapter.friendlyAdapterState );
+                
                 break;
             }
         }
@@ -402,12 +406,6 @@ static const CGFloat animationDuration = 0.15;
     } );
 }
     
--(void)onTransporterDidUpdateSignalStrength:(NSNotification*)notification
-{
-    dispatch_async( dispatch_get_main_queue(), ^{
-        self->_rssiLabel.text = [NSString stringWithFormat:@"-%.0f dbM", self->_transporter.signalStrength.floatValue];
-    } );
-}
 
 #pragma mark -
 #pragma mark <UITableViewDataSource>

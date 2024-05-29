@@ -32,7 +32,7 @@ NSString* const LTBTLESerialTransporterDidUpdateSignalStrength = @"LTBTLESerialT
     
     dispatch_queue_t _dispatchQueue;
     
-    LTBTLESerialTransporterConnectionBlock _connectionBlock;
+    TransporterConnectionBlock _connectionBlock;
     LTBTLEReadCharacteristicStream* _inputStream;
     LTBTLEWriteCharacteristicStream* _outputStream;
     
@@ -74,7 +74,7 @@ NSString* const LTBTLESerialTransporterDidUpdateSignalStrength = @"LTBTLESerialT
 #pragma mark -
 #pragma mark API
 
--(void)connectWithBlock:(LTBTLESerialTransporterConnectionBlock)block
+-(void)connectWithBlock:(TransporterConnectionBlock)block
 {
     _connectionBlock = block;
     
@@ -129,7 +129,7 @@ NSString* const LTBTLESerialTransporterDidUpdateSignalStrength = @"LTBTLESerialT
 
 -(void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-    if ( central.state != CBCentralManagerStatePoweredOn )
+    if ( central.state != CBManagerStatePoweredOn )
     {
         return;
     }
