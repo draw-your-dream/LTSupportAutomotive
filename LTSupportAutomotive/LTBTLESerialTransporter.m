@@ -11,7 +11,7 @@
 
 NSString* const LTBTLESerialTransporterDidUpdateSignalStrength = @"LTBTLESerialTransporterDidUpdateSignalStrength";
 
-//#define DEBUG_THIS_FILE
+#define DEBUG_THIS_FILE
 
 #ifdef DEBUG_THIS_FILE
     #define XLOG LOG
@@ -131,6 +131,8 @@ NSString* const LTBTLESerialTransporterDidUpdateSignalStrength = @"LTBTLESerialT
 {
     if ( central.state != CBManagerStatePoweredOn )
     {
+        LOG( @"Error: CBManagerStatePowered is OFF" );
+        [self connectionAttemptFailed];
         return;
     }
     NSArray<CBPeripheral*>* peripherals = [_manager retrieveConnectedPeripheralsWithServices:_serviceUUIDs];

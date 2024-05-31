@@ -250,19 +250,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		64E0AB642C05D899009419B3 /* TCP Transporter */ = {
-			isa = PBXGroup;
-			children = (
-				64E0AB772C05DDD7009419B3 /* TCPTransporter.h */,
-				64E0AB6F2C05DD89009419B3 /* TCPTransporter.m */,
-				64E0AB8D2C060718009419B3 /* TCPReadStream.h */,
-				64E0AB8E2C060718009419B3 /* TCPReadStream.m */,
-				64E0AB952C060762009419B3 /* TCPWriteStream.h */,
-				64E0AB962C060762009419B3 /* TCPWriteStream.m */,
-			);
-			path = "TCP Transporter";
-			sourceTree = "<group>";
-		};
 		64E0AB7E2C05F72E009419B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +265,19 @@
 				64E0AB862C05F8D6009419B3 /* GCDAsyncSocket.m */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		64E0ABA72C07489C009419B3 /* TCP Transporter */ = {
+			isa = PBXGroup;
+			children = (
+				64E0AB772C05DDD7009419B3 /* TCPTransporter.h */,
+				64E0AB6F2C05DD89009419B3 /* TCPTransporter.m */,
+				64E0AB8D2C060718009419B3 /* TCPReadStream.h */,
+				64E0AB8E2C060718009419B3 /* TCPReadStream.m */,
+				64E0AB952C060762009419B3 /* TCPWriteStream.h */,
+				64E0AB962C060762009419B3 /* TCPWriteStream.m */,
+			);
+			name = "TCP Transporter";
 			sourceTree = "<group>";
 		};
 		70C37D1B1D9A6ECD009116E1 /* Supporting Files */ = {
@@ -320,7 +320,7 @@
 				70DFA89B1D9A6E3F004ECF98 /* Protocols */,
 				70DFA89C1D9A6E45004ECF98 /* VIN Decoding */,
 				70DFA8981D9A6DE3004ECF98 /* Serial Transporter */,
-				64E0AB642C05D899009419B3 /* TCP Transporter */,
+				64E0ABA72C07489C009419B3 /* TCP Transporter */,
 			);
 			path = LTSupportAutomotive;
 			sourceTree = "<group>";
